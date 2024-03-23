@@ -3,6 +3,10 @@ package Test;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.reporter.ExtentSparkReporter;
+
 import io.github.bonigarcia.wdm.WebDriverManager;
 
 import org.testng.annotations.BeforeClass;
@@ -39,6 +43,10 @@ public class Test_Class {
 	WebDriver driver1;
 	Neo_Home hme;
    JsonDataFetch js=new JsonDataFetch();
+   static ExtentReports report;
+   static ExtentTest test;
+   static ExtentReports extent=new ExtentReports();
+   
 	@BeforeClass
 	public void InitialzeBrowser1() throws Throwable {
 		ChromeOptions opt = new ChromeOptions();
@@ -48,6 +56,7 @@ public class Test_Class {
 		driver1 = new ChromeDriver(opt);
 
 		driver1.get("https:/neostox.com/");
+
 		String title = driver1.getTitle();
 		System.out.println("Page title is :" + title);
 		driver1.manage().window().maximize();
@@ -72,15 +81,19 @@ public class Test_Class {
 		String Password=js.getJsonData("password");
 		hme.enterPass(Password);
 		hme.ClickSB2();
+		ExtentSparkReporter spark=new ExtentSparkReporter("target/spark.html");
+		extent.attachReporter(spark);
 //		fis2.close();
 	}
 	@Test
 	public void verifyuserID() throws Throwable {
+		extent.createTest("running verify user id");
 		Reporter.log("running verify user id", true);
 		String actID = hme.verifyuserID();
 		String ExpT=js.getJsonData("ExpT");
 //		String ExpT = sh2.getRow(0).getCell(2).getStringCellValue();
 		AssertJUnit.assertEquals(ExpT, actID);
+		extent.flush();
 
 	}
 

@@ -22,6 +22,7 @@ public class Facebook_Login {
 		
 		WebElement btn = driver.findElement(By.xpath("//button[text()='Log in']"));
 		btn.click();
+		//checking test
 		
 	}
 
